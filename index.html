@@ -1,0 +1,99 @@
+<!DOCTYPE html>
+<html lang="vi">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Bảng Dữ Liệu Đóng Góp</title>
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.6/css/jquery.dataTables.min.css">
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css">
+
+    <style>
+        body {
+            background-color: #f9f9f9;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        h1 {
+            text-align: center;
+            margin: 20px;
+            color: #333;
+        }
+
+        .container {
+            margin-top: 30px;
+        }
+
+        table.dataTable thead {
+            background-color: #007bff;
+            color: white;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <h1>Bảng Dữ Liệu Đóng Góp</h1>
+
+        <table id="myTable" class="display table table-striped table-bordered">
+            <thead>
+                <tr>
+                    <th>STT</th>
+                    <th>Họ và Tên</th>
+                    <th>Tiền (ngàn đồng)</th>
+                    <th>Quan Hệ</th>
+                    <th>Cư Trú</th>
+                    <th>Ghi Chú</th>
+                </tr>
+            </thead>
+            <tbody>
+            </tbody>
+        </table>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.7.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.6/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/papaparse@5.4.1/papaparse.min.js"></script>
+
+    <script>
+        $(document).ready(function () {
+            Papa.parse("data.csv", {
+                download: true,
+                header: true,
+                complete: function (results) {
+                    let data = results.data;
+                    data.forEach(function (row) {
+                        $('#myTable tbody').append(`
+                            <tr>
+                                <td>${row['STT'] || ''}</td>
+                                <td>${row['HỌ VÀ TÊN'] || ''}</td>
+                                <td>${row['TIỀN \n(ngàn đồng)'] || ''}</td>
+                                <td>${row['QUAN HỆ'] || ''}</td>
+                                <td>${row['CƯ TRÚ'] || ''}</td>
+                                <td>${row['GHI CHÚ'] || ''}</td>
+                            </tr>
+                        `);
+                    });
+                    $('#myTable').DataTable({
+                        "pageLength": 10,
+                        "language": {
+                            "search": "Tìm kiếm:",
+                            "lengthMenu": "Hiển thị _MENU_ dòng",
+                            "info": "Hiển thị _START_ đến _END_ của _TOTAL_ dòng",
+                            "paginate": {
+                                "first": "Đầu",
+                                "last": "Cuối",
+                                "next": "Tiếp",
+                                "previous": "Trước"
+                            },
+                            "zeroRecords": "Không tìm thấy dữ liệu phù hợp",
+                            "infoEmpty": "Không có dữ liệu",
+                            "infoFiltered": "(lọc từ _MAX_ dòng)"
+                        }
+                    });
+                }
+            });
+        });
+    </script>
+</body>
+
+</html>
